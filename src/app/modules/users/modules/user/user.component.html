@@ -1,0 +1,69 @@
+<button mat-icon-button color="primary" routerLink="/">
+    <mat-icon>home</mat-icon>
+</button>
+
+<div class="user">
+
+    <div class="user__col user__col--image col">
+        <div class="col__image">
+            <img [src]="user.picture.large">
+        </div>
+    </div>
+
+    <div class="user__col user__col--details">
+        <header>
+            <h1 class="user__title">{{ user.name.first }} {{ user.name.last }}</h1>
+        </header>
+
+        <ul class="user__list">
+            <li class="user__item item">
+                <div class="item__icon">
+                    <img aria-hidden 
+                        src="https://flagcdn.com/20x15/{{(user.nat).toLowerCase()}}.png" width="20" height="15">
+                </div>
+                <span class="item__content">
+                    {{ user.location.country }}
+                </span>
+            </li>
+            <li class="user__item">
+                <div class="item__icon">
+                    <mat-icon class="icon">location_on</mat-icon>
+                </div>
+                <span class="item__content">
+                    {{ user.location.city }},
+                    {{ user.location.street.name }} {{ user.location.street.number }}
+                </span>
+            </li>
+        </ul>
+
+        <div class="user__divider"></div>
+
+        <ul class="user__list">
+            <li class="user__item item">
+                <div class="item__icon">
+                    <mat-icon class="icon">phone_iphone</mat-icon>
+                </div>
+                <span class="item__content">
+                    {{ user.cell }}
+                </span>
+            </li>
+            <li class="user__item item">
+                <div class="item__icon">
+                    <mat-icon class="icon">alternate_email</mat-icon>
+                </div>
+                <span class="item__content">
+                    {{ user.email }}
+                </span>
+            </li>
+            <li class="user__item item">
+                <div class="item__icon">
+                    <mat-icon class="icon">cake</mat-icon>
+                </div>
+                <span class="item__content">
+                    {{ user.dob.date | date: 'dd/MM/yyyy' }} ({{ user.dob.age }} lat)
+                </span>
+            </li>
+        </ul>
+    </div>
+
+</div>
