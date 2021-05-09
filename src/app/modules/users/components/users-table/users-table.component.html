@@ -1,0 +1,81 @@
+<div class="users__settings">
+    <mat-form-field>
+        <mat-label>Szukaj</mat-label>
+        <input
+            matInput
+            #input
+            maxlength="50"
+            [disabled]="usersCollection.length === 0"
+            (keyup)="searchFilter($event)"
+            placeholder="Np. Becky Sims">
+    </mat-form-field>
+
+    <button
+        mat-icon-button
+        color="primary"
+        (click)="toggleEditMode()"
+        matTooltip="Dostosuj widok kolumn"
+        matTooltipPosition="right">
+        <mat-icon>visibility</mat-icon>
+    </button>
+    <form *ngIf="isEditMode" [formGroup]="formDisplayedColumns" class="form-displayed-columns">
+        <mat-checkbox color="primary" *ngFor="let cd of columnsDefinitions" [formControlName]="cd.def" class="form-displayed-columns__checkbox">
+            {{ cd.label }}
+        </mat-checkbox>
+    </form>
+</div>
+
+<div>
+    <table mat-table [dataSource]="dataSource" class="users__table">
+        <ng-container matColumnDef="nameFirst">
+            <th mat-header-cell *matHeaderCellDef>Imię</th>
+            <td mat-cell *matCellDef="let element">{{ element.name.first }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nameLast">
+            <th mat-header-cell *matHeaderCellDef>Nazwisko</th>
+            <td mat-cell *matCellDef="let element">{{ element.name.last }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="gender">
+            <th mat-header-cell *matHeaderCellDef>Płeć</th>
+            <td mat-cell *matCellDef="let element"><mat-icon>{{ element.gender }}</mat-icon></td>
+        </ng-container>
+
+        <ng-container matColumnDef="age">
+            <th mat-header-cell *matHeaderCellDef>Wiek</th>
+            <td mat-cell *matCellDef="let element">{{ element.dob.age }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Telefon</th>
+            <td mat-cell *matCellDef="let element">{{ element.cell }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nat">
+            <th mat-header-cell *matHeaderCellDef>Kraj</th>
+            <td mat-cell *matCellDef="let element">
+                <img class="option__flag" aria-hidden 
+                    src="https://flagcdn.com/28x21/{{(element.nat).toLowerCase()}}.png" width="28" height="21">
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;" [routerLink]="row.login.username" [state]="{ data: row }" class="users__table-row"></tr>
+    </table>
+
+    <div *ngIf="usersCollection.length === 0" class="users__no-records">
+        Brak danych
+    </div>
+
+    <div *ngIf="dataSource.filteredData.length === 0 && !(usersCollection.length === 0)" class="users__no-records">
+        Brak wyników dla frazy "{{ this.dataSource.filter }}"
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

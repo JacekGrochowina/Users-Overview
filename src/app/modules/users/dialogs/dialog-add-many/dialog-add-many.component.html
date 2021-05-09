@@ -1,0 +1,67 @@
+<h2 mat-dialog-title class="dialog__title">
+    <mat-icon class="icon">group_add</mat-icon>
+    Dodawanie wielu osób
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form">
+    <mat-form-field appearance="fill" class="form__row">
+        <mat-label>Liczba osób</mat-label>
+        <input
+            matInput
+            type="number"
+            formControlName="amount">    
+        <mat-hint>Wybierz ilość osób</mat-hint>
+        <mat-error *ngIf="formGroup.controls.amount.hasError('required')">
+            Podanie liczby osób <strong>jest wymagane</strong>
+        </mat-error>
+        <mat-error *ngIf="formGroup.controls.amount.value < 2 && !formGroup.controls.amount.hasError('required')">
+            Liczba osób nie może być <strong>mniejsza niż 2</strong>
+        </mat-error>
+        <mat-error *ngIf="formGroup.controls.amount.value > 100 && !formGroup.controls.amount.hasError('required')">
+            Liczba osób nie może być <strong>większa niż 100</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox color="primary" formControlName="isRandomGender">Losowa płeć</mat-checkbox>
+
+    <mat-form-field appearance="fill" class="form__row">
+        <mat-label>Płeć</mat-label>
+        <mat-select formControlName="gender">
+            <mat-option *ngFor="let gender of genders" [value]="gender.value">
+                {{ gender.name }}
+            </mat-option>
+        </mat-select>
+        <mat-hint>Wybierz płeć dodawanych osób</mat-hint>
+        <mat-error *ngIf="formGroup.controls.gender.hasError('required')">
+            Wybranie płci <strong>jest wymagane</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox color="primary" formControlName="isRandomNat">Losowa narodowość</mat-checkbox>
+
+    <mat-form-field appearance="fill" class="form__row">
+        <mat-label>Narodowość</mat-label>
+        <mat-select formControlName="nationality" multiple>
+            <mat-select-trigger class="form__select-trigger select-trigger">
+                {{ getNatsNameArray()[0] }}
+                <span *ngIf="getNatsNameArray().length > 1" class="select-trigger__additional">
+                    (+{{ getNatsNameArray().length - 1 }})
+                </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let nat of nationalities" [value]="nat.value" class="form__option option">
+                <img class="option__flag" aria-hidden 
+                    src="https://flagcdn.com/28x21/{{nat.value}}.png" width="28" height="21">
+                {{ nat.name }}
+            </mat-option>
+        </mat-select>
+        <mat-hint>Wybierz narodowość dodawanych osób</mat-hint>
+        <mat-error *ngIf="formGroup.controls.nationality.hasError('required')">
+            Wybranie narodowości <strong>jest wymagane</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-dialog-actions align="end">
+        <button mat-stroked-button mat-dialog-close color="primary">Anuluj</button>
+        <button mat-raised-button color="primary" [mat-dialog-close]="true" [disabled]="!formGroup.valid" type="submit">Dodaj</button>
+    </mat-dialog-actions>
+</form>
